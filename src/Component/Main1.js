@@ -8,7 +8,7 @@ export default function Main1(props) {
     .map(item => <div className="col-md-6">
       <h3>Tin nổi bật</h3>
       <div className="card mb-12">
-      <img className="card-img-top" src={"./images/"+item.img} alt="Card  cap" />
+      <img className="card-img-top" src={"./images/"+item.img} alt="anh hap dan" />
       <div className="card-body">
       <h5 className="card-title">{item.title}</h5>
       {showRow(props.duLieu)}
@@ -25,7 +25,7 @@ export default function Main1(props) {
 const showRow = (arr)=>{
   return arr.map( (item,index)=>{
     if(index<5){
-      return  <p className="card-text">{item.title}</p>
+      return  <p className="card-text"><a href='https://vov.vn/xa-hoi/du-bao-thoi-tiet-ngay-305-bac-bo-va-nam-bo-mua-to-kha-nang-xay-ra-loc-post946990.vov'>{item.title}</a></p>
     }
     else{
       return ""

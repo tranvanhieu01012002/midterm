@@ -4,6 +4,7 @@ import React from 'react'
 import Form from '../Component/Form'
 import { useEffect,useState } from 'react';
 import Show from '../Component/Show';
+import API from '../Data/API';
 
 export default function Add() {
   const [data, setData] = useState([]);
@@ -15,26 +16,26 @@ export default function Add() {
     content:'',
     show:''
     });
+  
   useEffect(
     ()=>{
-        axios.get("https://6290397627f4ba1c65b59fa3.mockapi.io/news")
+        axios.get(API)
         .then(res=>setData(res.data))
         .catch(res=>console.log(res))
     },[status])
     //done
 
     const  deletee = async (e)=>{
-      await axios.delete(`https://6290397627f4ba1c65b59fa3.mockapi.io/news/${e.target.id}`)
+      await axios.delete(`${API}/${e.target.id}`)
       .then(res => {
       console.log(res);
       console.log(res.data);})
-      // window.location.reload(true)
       setStatus(!status)
+      alert("Bạn đã xóa thành công tin tức");
   }
 
   const edit = (e)=>{
-    // setStudent({...student, [e.target.name]: e.target.value})
-    axios.get(`https://6290397627f4ba1c65b59fa3.mockapi.io/news/${e.target.id}`)
+    axios.get(`${API}/${e.target.id}`)
     .then(res=>{
       setPosting(res.data);
       setBtn("edit")
@@ -44,10 +45,8 @@ export default function Add() {
     const changeHandler = e => {
       let name = e.target.name
       let value = e.target.value
-      //change to  get ending file
       if(name === "img"){
         value = ""+ document.querySelector("#image").files.item(0).name;
-        // value = URL.createObjectURL(file)
       }
       setPosting({...posting, [name]: value})
     }
@@ -55,20 +54,24 @@ export default function Add() {
       e.preventDefault()
       document.querySelector("#submit").innerHTML === 'add'
        ?
-       axios.post(`https://6290397627f4ba1c65b59fa3.mockapi.io/news`, posting)
+       axios.post(API, posting)
        .then(res => {
-         console.log(res);
-         console.log(res.data);
          setStatus(!status)
-         setPosting({img:'',title:'',content:'',show:''})
+         alert("Bạn đã thêm thành công tin tức");
+         // after post need to reset form
+         reset();
        })
        :
-       axios.put(`https://6290397627f4ba1c65b59fa3.mockapi.io/news/${posting.id}`, posting)
+       axios.put(`${API}/${posting.id}`, posting)
        .then(res => {
          console.log(res);
+         alert("Bạn đã thay đổi thành công tin tức");
          console.log(res.data);
          setStatus(!status)
        })
+   }
+   const reset = ()=>{
+    setPosting({img:'',title:'',content:'',show:''})
    }
   return (
     <>
@@ -76,11 +79,14 @@ export default function Add() {
        action={btn}
        posting = {posting}
        changeHandler = {changeHandler}
-       submit = {submit} />
+       submit = {submit} 
+       reset = {reset}/>
+        
       <Show
         edit ={edit}
         data={data}
         delete={deletee}
+      
       ></Show>
     </>
   )
